@@ -11,6 +11,6 @@
                                      [nrepl "0.9.0"]
                                      [nrepl-complete "0.1.0"]
                                      [vlaaad/reveal "1.3.272"]]
-                      :repl-options {:nrepl-middleware [vlaaad.reveal.nrepl/middleware]}
+                      ;;:repl-options {:nrepl-middleware [vlaaad.reveal.nrepl/middleware]}
                       :jvm-opts     ["-Dfile.encoding=UTF-8"
                                      "-Dvlaaad.reveal.prefs={:theme,:light,:font-family,\"Consolas\",:font-size,12}"]}})

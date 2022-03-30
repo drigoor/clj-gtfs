@@ -8,10 +8,18 @@
 
 ;; from: https://github.com/seancorfield/dot-clojure
 (defn- ->long
-  "Attempt to parse a string as a Long and return nil if it fails."
+  "Attempt to parse a string as a long and return nil if it fails."
   [s]
   (try
     (and s (Long/parseLong s))
+    (catch Throwable _)))
+
+
+(defn ->int
+  "Attempt to parse a string as an int and return nil if it fails."
+  [s]
+  (try
+    (and s (Integer/parseInt s))
     (catch Throwable _)))
 
 
@@ -27,30 +35,6 @@
        (csv/parse-csv)
        (rest)
        (map function)))
-
-
-(comment
-  (parse-hour-minute-second "00:00:54")
-  (parse-hour-minute-second "00:01:54")
-  (parse-hour-minute-second "00:02:54")
-  (parse-hour-minute-second "06:51:54")
-  (parse-hour-minute-second "24:00:00")
-
-
-
-  (def stop-times (parse-gtfs "data/stop_times.txt"
-                              (fn [[trip_id, arrival_time, departure_time, stop_id, stop_sequence, stop_headsign, pickup_type, drop_off_type, shape_dist_traveled]]
-                                {:trip-id        (Integer/parseInt trip_id)
-                                 :arrival-time   arrival_time ;(parse-hour-minute-second arrival_time)
-                                 :departure-time departure_time ;(parse-hour-minute-second departure_time)
-                                 :stop-id        (keyword stop_id)
-                                 :stop-sequence  (Integer/parseInt stop_sequence)})))
-
-
-  (sort-by :stop-id stops)
-
-  (group-by :trip-id stop-times))
-
 
 
 (def stops (parse-gtfs "data/stops.txt"
@@ -80,7 +64,7 @@
 
 (defn hello-world [_]
   {:status 200
-   :body "Hello clojure"})
+   :body   "These aren’t the Droids You are Looking For"})
 
 
 (def routes #{["/" :get hello-world :route-name :hello-world]
@@ -93,7 +77,7 @@
    ::http/type   :immutant
    ::http/host   "0.0.0.0"
    ::http/join?  false
-   ::http/port   (Integer. (or (env :port) 5000))})
+   ::http/port   (or (->int (env :port)) 5000)})
 
 
 (defn -main [& [http-port]]
@@ -103,5 +87,40 @@
 
 
 (comment
-  42
-  (-main))
+
+
+
+  (require '[vlaaad.reveal :as r])
+
+  (r/tap-log)
+
+  (tap> stops)
+
+  (-main)
+
+
+
+
+
+  (parse-hour-minute-second "00:00:54")
+  (parse-hour-minute-second "00:01:54")
+  (parse-hour-minute-second "00:02:54")
+  (parse-hour-minute-second "06:51:54")
+  (parse-hour-minute-second "24:00:00")
+
+
+
+  (def stop-times (parse-gtfs "data/stop_times.txt"
+                              (fn [[trip_id, arrival_time, departure_time, stop_id, stop_sequence, stop_headsign, pickup_type, drop_off_type, shape_dist_traveled]]
+                                {:trip-id        (Integer/parseInt trip_id)
+                                 :arrival-time   arrival_time ;(parse-hour-minute-second arrival_time)
+                                 :departure-time departure_time ;(parse-hour-minute-second departure_time)
+                                 :stop-id        (keyword stop_id)
+                                 :stop-sequence  (Integer/parseInt stop_sequence)})))
+
+
+  (sort-by :stop-id stops)
+
+  (group-by :trip-id stop-times)
+
+  )
