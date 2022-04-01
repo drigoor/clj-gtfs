@@ -3,8 +3,8 @@
                  [clojure-csv "2.0.2"]
                  [io.pedestal/pedestal.service "0.5.10"]
                  [io.pedestal/pedestal.route "0.5.10"]
-                 [io.pedestal/pedestal.immutant "0.5.10"]
-                 [environ "1.2.0"]]
+                 [io.pedestal/pedestal.immutant "0.5.10"]]
+                 ;;[environ "1.2.0"]]
   :main clj-gtfs.core
   :repl-options {:init-ns clj-gtfs.core}
   :profiles {:reveal {:dependencies [[org.clojure/clojure "1.10.3"]
